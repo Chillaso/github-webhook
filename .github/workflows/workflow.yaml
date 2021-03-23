@@ -41,7 +41,7 @@ jobs:
         helm: 'helm3'
         release: github-webhook
         namespace: 'restock'
-        chart: 'helm/github-webhook/Chart.yaml'
+        chart: 'app'
         version: ${GITHUB_SHA::8}
         values: |
           instance: ${GITHUB_REF##*/}
