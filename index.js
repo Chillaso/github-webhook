@@ -1,4 +1,17 @@
 const { request } = require("@octokit/request");
+const express = require('express')
+const app = express()
+const port = 8081
+
+app.use(express.json());
+
+app.post('/checker/deploy', async (req, res) => {
+
+    process.on('unhandledRejection', _ => {});
+    let status = await requestDeployment(req.body.URL_ITEM, req.body.ID_ITEM, req.body.MAX_PRICE);
+    res.sendStatus(status);
+
+});
 
 async function requestDeployment(url, id, price) {
     request("POST /repos/{owner}/{repo}/deployments", {
@@ -7,7 +20,7 @@ async function requestDeployment(url, id, price) {
         ref: "main",
         headers: {
             accept: "application/vnd.github.v3+json",
-            authorization: "token 47c7bd0c666d97f376b0a9e5c097f29574d897b5"
+            authorization: `token ${process.env.GITHUB_AUTH_TOKEN}`
         },
         payload: {  
             URL_ITEM: url,
@@ -15,8 +28,10 @@ async function requestDeployment(url, id, price) {
             MAX_PRICE: price
         }
     })
-    .then(response => console.log(response.status))
+    .then(response => console.log(`${response.status} - Deployment created for product: ${url} with id: ${id} and max price: ${price}`))
     .catch(error => console.log(error));
 }
 
-requestDeployment("a", "1", "2");
+app.listen(port, () => {
+    console.log(`Server up, listening on ${port}`)
+})
