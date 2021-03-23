@@ -39,9 +39,9 @@ jobs:
       uses: 'deliverybot/helm@v1'
       with:
         helm: 'helm3'
-        release: ${GITHUB_WORKFLOW}
+        release: github-webhook-${GITHUB_SHA::8}
         namespace: 'restock'
-        chart: 'helm/${GITHUB_WORKFLOW}/Chart.yaml'
+        chart: 'helm/github-webhook/Chart.yaml'
         version: ${GITHUB_SHA::8}
         values: |
           instance: ${GITHUB_REF##*/}
