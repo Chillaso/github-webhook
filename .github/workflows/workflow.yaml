@@ -33,7 +33,7 @@ jobs:
       with:
         #context: .
         platforms: linux/arm64
-        tags: ${{ steps.login-ecr.outputs.registry }}/github-webhook:latest
+        tags: ${{ steps.login-ecr.outputs.registry }}/${{ github.workflow }}:latest
 
     - name: Deploy helm chart to kubernetes
       uses: 'deliverybot/helm@v1'
