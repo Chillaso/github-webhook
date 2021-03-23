@@ -31,7 +31,7 @@ jobs:
       id: docker_build
       uses: docker/build-push-action@v2
       with:
-        #context: .
+        push: true
         platforms: linux/arm64
         tags: ${{ steps.login-ecr.outputs.registry }}/${{ github.workflow }}:latest
 
@@ -42,7 +42,6 @@ jobs:
         release: ${GITHUB_WORKFLOW}
         namespace: 'restock'
         chart: 'helm/${GITHUB_WORKFLOW}/Chart.yaml'
-        chart_version: '1.0.0'
         version: ${GITHUB_SHA::8}
         values: |
           instance: ${GITHUB_REF##*/}
