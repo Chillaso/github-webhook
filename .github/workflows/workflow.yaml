@@ -10,6 +10,10 @@ jobs:
     name: github-workflow
     runs-on: ubuntu-latest
     steps:
+
+    - name: Test
+      uses: echo ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
 
