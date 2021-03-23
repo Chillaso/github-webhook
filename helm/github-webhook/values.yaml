@@ -1,0 +1,33 @@
+replicaCount: 1
+
+image:
+  repository: 172380189452.dkr.ecr.eu-west-1.amazonaws.com/github-webhook
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets:
+- name: ecr-docker-login-demo
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: "default"
+
+podAnnotations: {}
+
+securityContext:
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
+resources: 
+  limits:
+    cpu: 100m
+    memory: 120Mi
+  requests:
+    cpu: 50m
+    memory: 60Mi
+
+env:
+  #GITHUB_AUTH_TOKEN: "47c7bd0c666d97f376b0a9e5c097f29574d897b5" 
+  GITHUB_AUTH_TOKEN: "set-in-deployment" 

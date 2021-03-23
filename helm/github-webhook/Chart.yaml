@@ -1,0 +1,8 @@
+apiVersion: v2
+name: github-webhook
+description: A Helm chart for Kubernetes
+type: application
+#Chart version
+version: 1.0.0
+#App version
+appVersion: "1.0.0"
