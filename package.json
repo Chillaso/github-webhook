@@ -9,7 +9,7 @@
   "author": "Chillaso",
   "license": "ISC",
   "dependencies": {
-    "@octokit/core": "^3.3.1",
+    "@octokit/request": "^5.4.14",
     "express": "^4.17.1"
   }
 }

@@ -1,47 +1,22 @@
-"use strict";
-
-const { Octokit } = require("@octokit/core");
-const express = require('express');
-const app = express()
-const port = 8081
-const octokit = new Octokit({auth: `${process.env.AUTH_TOKEN}`});
-
-app.use(express.json());
-
-app.post('/checker/deploy', async (req, res) => {
-
-    process.on('unhandledRejection', _ => {});
-    console.log(req.body);
-    let status = await requestDeployment(req.body.URL_ITEM, req.body.ID_ITEM, req.body.MAX_PRICE);
-    res.sendStatus(status);
-
-});
+const { request } = require("@octokit/request");
 
 async function requestDeployment(url, id, price) {
-    try{
-        var response = await octokit.request("POST /repos/gg-restock/pcc-checker/deployments", {
-            headers: {
-                accept: "application/vnd.github.v3+json"
-            },
-            ref: "main",
-            payload: {  
-                URL_ITEM: url,
-                ID_ITEM: id,
-                MAX_PRICE: price
-            }
-        });
-    } catch(error){
-        console.log(error);
-    }
-
-    if(response.status == 201){
-        console.log(`Deployed checker with url: ${url} --- id: ${id} and max price: ${price}`);
-    } else {
-        console.log('Failed to deploy checker');
-    }
-    return response.status;
+    request("POST /repos/{owner}/{repo}/deployments", {
+        owner: "gg-restock",
+        repo: "pcc-checker",
+        ref: "main",
+        headers: {
+            accept: "application/vnd.github.v3+json",
+            authorization: "token 47c7bd0c666d97f376b0a9e5c097f29574d897b5"
+        },
+        payload: {  
+            URL_ITEM: url,
+            ID_ITEM: id,
+            MAX_PRICE: price
+        }
+    })
+    .then(response => console.log(response.status))
+    .catch(error => console.log(error));
 }
 
-app.listen(port, () => {
-    console.log(`Server up, listening on ${port}`)
-})
+requestDeployment("a", "1", "2");
