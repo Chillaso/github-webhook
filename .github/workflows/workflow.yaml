@@ -9,6 +9,8 @@ jobs:
   github-workflow:
     name: github-workflow
     runs-on: ubuntu-latest
+    env:
+      TRIM_SHA: ${GITHUB_SHA::8}
     steps:
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
@@ -42,8 +44,8 @@ jobs:
       with:
         args: |
           cd helm/github-webhook
-          helm package --version ${{ github.sha::8 }} .
-          helm install github-webhook-${{ github.sha::8 }}.tgz \
+          helm package --version ${TRIM_SHA} .
+          helm install github-webhook-${TRIM_SHA}.tgz \
           -n restock \
           --set instance=${{ github.ref##*/ }} \
           --set GITHUB_AUTH_TOKEN: ${{ secrets.WEBHOOK_AUTH_TOKEN }}
