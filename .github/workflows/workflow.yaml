@@ -51,5 +51,5 @@ jobs:
           helm install github-webhook-${TRIM_SHA} \
           -n restock \
           --set instance=${BRANCH_NAME} \
-          --set GITHUB_AUTH_TOKEN=${{ secrets.WEBHOOK_AUTH_TOKEN }}
+          --set GITHUB_AUTH_TOKEN=${{ secrets.WEBHOOK_AUTH_TOKEN }} \
           github-webhook-${TRIM_SHA}.tgz  
