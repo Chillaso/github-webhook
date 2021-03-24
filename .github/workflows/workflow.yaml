@@ -50,7 +50,8 @@ jobs:
         args: |
           cd ./helm/github-webhook
           helm package .
-          helm upgrade github-webhook github-webhook-${{ env.TRIM_SHA }} \
-          --install -n restock \
+          helm upgrade github-webhook-${{ env.TRIM_SHA }} \
+          --install \
+          -n restock \
           --set instance=${{ env.BRANCH_NAME }} \
           --set GITHUB_AUTH_TOKEN=${{ secrets.WEBHOOK_AUTH_TOKEN }} .
