@@ -42,9 +42,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Ls folder
-      run: ls -la
-
     - name: Package and deploy Helm Chart
       uses: wahyd4/kubectl-helm-action@master
       env:
@@ -52,9 +49,9 @@ jobs:
       with:
         args: |
           cd ./helm/github-webhook
-          helm package --version ${TRIM_SHA} .
-          helm install github-webhook-${TRIM_SHA} \
+          helm package --version ${{ env.TRIM_SHA }} .
+          helm install github-webhook-${{ env.TRIM_SHA }} \
           -n restock \
-          --set instance=${BRANCH_NAME} \
+          --set instance=${{ env.BRANCH_NAME }} \
           --set GITHUB_AUTH_TOKEN=${{ secrets.WEBHOOK_AUTH_TOKEN }} \
-          github-webhook-${TRIM_SHA}.tgz  
+          github-webhook-${{ env.TRIM_SHA }}.tgz  
