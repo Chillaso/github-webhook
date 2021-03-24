@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TRIM_SHA: ${GITHUB_SHA::8}
+      TRIM_REF: ${{ github.ref##*/ }}
     steps:
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
@@ -47,6 +48,6 @@ jobs:
           helm package --version ${TRIM_SHA} .
           helm install github-webhook-${TRIM_SHA}.tgz \
           -n restock \
-          --set instance=${{ github.ref##*/ }} \
-          --set GITHUB_AUTH_TOKEN: ${{ secrets.WEBHOOK_AUTH_TOKEN }}
-          github-webhook-${{ github.sha::8 }}.tgz  
+          --set instance=${TRIM_REF} \
+          --set GITHUB_AUTH_TOKEN=${{ secrets.WEBHOOK_AUTH_TOKEN }}
+          github-webhook-${TRIM_SHA}.tgz  
