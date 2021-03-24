@@ -35,16 +35,16 @@ jobs:
         platforms: linux/arm64
         tags: ${{ steps.login-ecr.outputs.registry }}/github-webhook:latest  #${{ github.workflow }}:latest
 
-    - name: Deploy helm chart to kubernetes
-      uses: 'deliverybot/helm@v1'
-      with:
-        helm: 'helm3'
-        release: github-webhook
-        namespace: 'restock'
-        chart: 'app'
-        version: ${GITHUB_SHA::8}
-        values: |
-          instance: ${GITHUB_REF##*/}
-          GITHUB_AUTH_TOKEN: ${{ secrets.WEBHOOK_AUTH_TOKEN }}
+    - name: Package and deploy Helm Chart
+      uses: wahyd4/kubectl-helm-action@master
       env:
-        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+        KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
+      with:
+        args: |
+        cd helm/github-webhook
+        helm package --version ${{ github.sha::8 }} .
+        helm install github-webhook-${{ github.sha::8 }}.tgz \
+        -n restock \
+        --set instance=${{ github.ref##*/ }} \
+        --set GITHUB_AUTH_TOKEN: ${{ secrets.WEBHOOK_AUTH_TOKEN }}
+        github-webhook-${{ github.sha::8 }}.tgz  
