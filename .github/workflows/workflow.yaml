@@ -39,13 +39,14 @@ jobs:
         platforms: linux/arm64
         tags: ${{ steps.login-ecr.outputs.registry }}/github-webhook:latest  #${{ github.workflow }}:latest
 
+    - name: Ls folder
+      run: ls -la
     - name: Package and deploy Helm Chart
       uses: wahyd4/kubectl-helm-action@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
       with:
         args: |
-          ls
           cd ./helm/github-webhook
           helm package --version ${TRIM_SHA} .
           helm install github-webhook-${TRIM_SHA} \
