@@ -14,6 +14,11 @@ app.post('/checker/deploy', async (req, res) => {
 });
 
 async function requestDeployment(url, id, price) {
+    let url = body.URL_ITEM
+    let id = body.ID_ITEM
+    let price = body.MAX_PRICE
+    let deployName = body.DEPLOY_NAME
+
     request("POST /repos/{owner}/{repo}/deployments", {
         owner: "gg-restock",
         repo: "pcc-checker",
@@ -25,7 +30,8 @@ async function requestDeployment(url, id, price) {
         payload: {  
             URL_ITEM: url,
             ID_ITEM: id,
-            MAX_PRICE: price
+            MAX_PRICE: price,
+            DEPLOY_NAME: deployName
         }
     })
     .then(response => console.log(`${response.status} - Deployment created for product: ${url} with id: ${id} and max price: ${price}`))
